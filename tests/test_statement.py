@@ -1,6 +1,5 @@
 import json
 import unittest
-from pprint import pprint
 from src.statement import statement
 
 with open("data/plays.json") as f:
