@@ -1,12 +1,21 @@
 from math import floor
+from pprint import pprint
+
+
+def usd(aNumber):
+    return '${:,.2f}'.format(aNumber / 100)
 
 
 def statement(invoice, plays):
-    totalAmount = 0
-    result = "Statement for {}\n".format(invoice['customer'])
+    statementData = {}
+    statementData["customer"] = invoice["customer"]
+    statementData["performances"] = invoice["performances"]
 
-    def usd(aNumber):
-        return '${:,.2f}'.format(aNumber / 100)
+    return renderPlainText(statementData, plays)
+
+
+def renderPlainText(data, plays):
+    result = "Statement for {}\n".format(data['customer'])
 
     def playFor(aPerformance):
         return plays[aPerformance["playID"]]
@@ -37,17 +46,17 @@ def statement(invoice, plays):
 
     def totalVolumeCredits():
         result = 0
-        for perf in invoice['performances']:
+        for perf in data['performances']:
             result += volumeCreditsFor(perf)
         return result
 
     def totalAmount():
         result = 0
-        for perf in invoice["performances"]:
+        for perf in data["performances"]:
             result += amountFor(perf)
         return result
 
-    for perf in invoice['performances']:
+    for perf in data['performances']:
         result += " {}: {} ({} seats)\n".format(
             playFor(perf)["name"],
             usd(amountFor(perf)), perf["audience"])
